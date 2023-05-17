@@ -31,9 +31,15 @@ function App() {
     setTodos(newTodos);
   }
 
+
   return (
     <>
     <input type='text' ref={todoNameRef} />
+    <select>
+      <option value="work">仕事</option>
+      <option value="housework">家事</option>
+      <option value="friend">友人</option>
+    </select>
     <button onClick={handleAddTodo}>タスクを追加</button>
     <button onClick={handleClear}>タスクを削除</button>
     <TodoList todos = {todos} toggleTodo={toggleTodo} />
