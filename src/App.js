@@ -6,9 +6,9 @@ import axios from 'axios';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [dogImage, setDogImage] = useState();
+  const [dogImage, setDogImage] = useState(null);
   const [count, setCount] = useState(0);
-
+  const [tips, setTips] = useState(null);
   const todoNameRef = useRef();
 
   const handleAddTodo = () => {
@@ -30,10 +30,10 @@ function App() {
 
       if (todo.completed === true) {
         setDogImage(
-          <img src={imageUrl} alt='dogImage' />
+          <img src={imageUrl} alt='dogImage' style={{height: "120px", width: "auto"}}/>
         )
         setCount(prevCount => prevCount += 1)
-        if (count !== 0 && count % 3 === 0) {
+        if (count % 3 === 2) {
           fetchTips();
         }
       }
@@ -44,7 +44,9 @@ function App() {
 
   const fetchTips = async () => {
     try {
-      const response = await axios.get("");
+      const response = await axios.get("https://api.adviceslip.com/advice");
+      const tip = response.data.slip.advice;
+      setTips(<p>{tip}</p>);
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
@@ -64,9 +66,9 @@ function App() {
   }
 
   return (
-    <>
+    <div className = '' style={{padding:"50px"}}>
       <div>{count}</div>
-      <div className='p-20 flex justify-center'>
+      <div className=''>
         <div className='p-10 rounded-xl bg-red-400'>
           <input className='justify-around mr-2 rounded-sm p-1' type='text' ref={todoNameRef} />
           <select className='mr-2 rounded-sm p-1'>
@@ -81,7 +83,8 @@ function App() {
       <TodoList todos={todos} toggleTodo={toggleTodo}/>
       <div>残りのタスク：{todos.filter((todo) => !todo.completed).length}</div>
       {dogImage}
-    </>
+      {tips}
+    </div>
   );
 }
 
