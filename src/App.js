@@ -5,7 +5,16 @@ import './input.css';
 import axios from 'axios';
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  //todoのサンプル
+  const sample = {
+    id: uuidv4(),
+    name: "sample",
+    completed: false,
+    date: "2023-5-1",
+    assignment: "Takeshi"
+  }
+
+  const [todos, setTodos] = useState([sample]);
   const [dogImage, setDogImage] = useState();
   const [count, setCount] = useState(0);
   const [tips, setTips] = useState();
@@ -15,8 +24,8 @@ function App() {
 
   const todoNameRef = useRef();
 
+  //タスクを追加
   const handleAddTodo = () => {
-    //タスクを追加する。
     const name = todoNameRef.current.value;
     if (name === "") return;
 
@@ -35,6 +44,7 @@ function App() {
 
   };
 
+  //犬の画像を取得
   const fetchDog = async (todo) => {
     try {
       const response = await axios.get("https://dog.ceo/api/breeds/image/random");
@@ -54,6 +64,7 @@ function App() {
     }
   }
 
+  //Tipsを取得
   const fetchTips = async () => {
     try {
       const response = await axios.get("https://api.adviceslip.com/advice");
@@ -64,6 +75,7 @@ function App() {
     }
   }
 
+  //checkのbooleanを反転する
   const toggleTodo = (id) => {
     const newTodos = [...todos];
     const todo = newTodos.find((todo) => todo.id === id);
@@ -72,13 +84,17 @@ function App() {
     fetchDog(todo);
   };
 
+  //checkがfalseの要素を消す
   const handleClear = () => {
     const newTodos = todos.filter((todo) => !todo.completed);
     setTodos(newTodos);
   }
 
+  //フィルター関数
 
-  useEffect(()=> {
+
+  //todo更新時に日付順にソートする
+  useEffect(() => {
     const sortTodosByDate = () => {
       const sortedTodos = [...todos].sort((a, b) => {
         const dateA = new Date(a.date);
@@ -88,7 +104,9 @@ function App() {
       setTodos(sortedTodos);
     };
 
-    sortTodosByDate()},[todos])
+    sortTodosByDate()
+  }, [todos])
+
 
   return (
     <div className='' style={{ padding: "50px" }}>
@@ -107,7 +125,7 @@ function App() {
             <option value="housework">家事</option>
             <option value="friend">友人</option>
           </select>
-          <select className='mr-2 rounded-sm p-1'  onChange={(e) => setAsignment(e.target.value)}>
+          <select className='mr-2 rounded-sm p-1' onChange={(e) => setAssignment(e.target.value)}>
             <option value="member1">メンバー１</option>
             <option value="member2">メンバー２</option>
             <option value="member3">メンバー３</option>
