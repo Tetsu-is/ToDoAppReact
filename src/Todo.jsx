@@ -1,17 +1,13 @@
 import React from "react";
 import "./input.css";
-import { Accordion } from "@mantine/core";
 
 const Todo = ({ todo, toggleTodo }) => {
   const handleTodoClick = () => {
     toggleTodo(todo.id);
   };
   return (
-    <div>
-      <Accordion variant="separated">
-        <Accordion.Item value="customization">
-          <Accordion.Control>
-          <label>
+    <div className = 'b-1 bg-green-400 p-5 mb-2 rounded-xl' >
+      <label className="text-lg">
             <input
               type="checkbox"
               checked={todo.completed}
@@ -19,13 +15,7 @@ const Todo = ({ todo, toggleTodo }) => {
               onChange={handleTodoClick}
             />
           </label>
-          {todo.name}
-          </Accordion.Control>
-          <Accordion.Panel>
-            <h1>childTask</h1>
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
+          {todo.name} {todo.date} {todo.asignment}
     </div>
   );
 };

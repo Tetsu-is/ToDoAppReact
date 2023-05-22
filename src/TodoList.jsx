@@ -4,7 +4,7 @@ import "./input.css";
 
 const TodoList = ({ todos, toggleTodo }) => {
   return (
-    <div>
+    <div className='p-10'>
       {todos.map((todo) => (
         <Todo todo={todo} key={todo.id} toggleTodo={toggleTodo} />
       ))}
