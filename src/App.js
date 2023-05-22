@@ -10,7 +10,7 @@ function App() {
   const [count, setCount] = useState(0);
   const [tips, setTips] = useState();
   const [selectedDate, setSelectedDate] = useState();
-  const [asignment, setAsignment] = useState("member1");
+  const [assignment, setAssignment] = useState("member1");
 
 
   const todoNameRef = useRef();
@@ -25,7 +25,7 @@ function App() {
       name: name,
       completed: false,
       date: selectedDate,
-      asignment: asignment
+      assignment: assignment
     }
     setTodos((prevTodos) => {
       return [...prevTodos, newTodo];
@@ -99,7 +99,7 @@ function App() {
           <input className='justify-around mr-2 rounded-sm p-1' type='date' onChange={(e) => setSelectedDate(e.target.value)} />
           <select className='mr-2 rouded-sm p-1'>
             <option value="high">高</option>
-            <option value="midium">中</option>
+            <option value="medium">中</option>
             <option value="low">低</option>
           </select>
           <select className='mr-2 rounded-sm p-1'>
