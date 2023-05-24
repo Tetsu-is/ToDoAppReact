@@ -15,7 +15,7 @@ const Todo = ({ todo, toggleTodo }) => {
               onChange={handleTodoClick}
             />
           </label>
-          {todo.name} {todo.date} {todo.assignment}
+          {todo.priority} {todo.name} {todo.date} {todo.assignment}
     </div>
   );
 };
