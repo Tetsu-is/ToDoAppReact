@@ -1,4 +1,4 @@
-import { useState, useRef} from 'react';
+import { useState, useRef, useEffect } from 'react';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
 import './input.css';
@@ -69,13 +69,17 @@ function App() {
       priority: priority,
       assignment: assignment
     }
+    
     setTodos((prevTodos) => {
-      return [...prevTodos, newTodo];
+      const updatedTodos = [...prevTodos, newTodo];
+      const sortedTodos = sortTodosByDate(updatedTodos);
+      setDisplayTodos(sortedTodos);
+      return sortedTodos;
     });
 
-    todoNameRef.current.value = null;
-    sortTodosByDate()
+    console.log(todos);
 
+    todoNameRef.current.value = null;
   };
 
   //犬の画像を取得
@@ -134,6 +138,15 @@ function App() {
   };
 
 
+  //重要度ソート
+  const handleSortByPriorty = () => {
+    const sortedTodos = [...todos].sort((a, b) => {
+      return a.priority - b.priority;
+    });
+    setDisplayTodos(sortedTodos);
+  }
+
+
   //検索・ソート解除関数
   const handleReset = () => {
     setDisplayTodos(todos);
@@ -142,17 +155,16 @@ function App() {
 
 
   //todo更新時に日付順にソートする
-  const sortTodosByDate = () => {
+  const sortTodosByDate = (todos) => {
     const sortedTodos = [...todos].sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
       return dateA - dateB;
     });
-    setTodos(sortedTodos);
+    return sortedTodos;
   };
+  
 
-
-  console.log(todos);
   return (
     <div className='' style={{ padding: "50px" }}>
       <div>{count}</div>
@@ -183,6 +195,7 @@ function App() {
       <div className='px-10 py-5 bg-blue-200'>
         <input type="text" onChange={(e) => setSearchTerm(e.target.value)} />
         <button onClick={() => handleSearch()}>検索</button>
+        <button onClick={handleSortByPriorty}>重要度順</button>
         <button onClick={handleReset}>　検索・ソート解除</button>
       </div>
       <TodoList todos={displayTodos} toggleTodo={toggleTodo} />
