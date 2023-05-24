@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
 import './input.css';
@@ -6,6 +6,19 @@ import axios from 'axios';
 
 function App() {
   //todoのサンプル
+
+  const child1 = {
+    id: uuidv4(),
+    name: "c1",
+    completed: false
+  }
+
+  const child2 = {
+    id: uuidv4(),
+    name: "c2",
+    completed: false
+  }
+
   const sample = [
     {
       id: uuidv4(),
@@ -13,7 +26,8 @@ function App() {
       completed: false,
       date: "2023-5-1",
       priority: "1",
-      assignment: "Takeshi"
+      assignment: "Takeshi",
+      child: [child1]
     },
     {
       id: uuidv4(),
@@ -21,7 +35,8 @@ function App() {
       completed: false,
       date: "2023-5-1",
       priority: "2",
-      assignment: "Takeshi"
+      assignment: "Takeshi",
+      child: [child1,child2]
     },
     {
       id: uuidv4(),
@@ -29,7 +44,8 @@ function App() {
       completed: false,
       date: "2023-5-1",
       priority: "3",
-      assignment: "Takeshi"
+      assignment: "Takeshi",
+      child: []
     },
     {
       id: uuidv4(),
@@ -37,7 +53,8 @@ function App() {
       completed: false,
       date: "2023-5-1",
       priority: "1",
-      assignment: "Takeshi"
+      assignment: "Takeshi",
+      child: []
     }
   ];
 
@@ -46,15 +63,14 @@ function App() {
   const [count, setCount] = useState(0);
   const [tips, setTips] = useState();
   const [selectedDate, setSelectedDate] = useState();
-  const [priority, setPriority] = useState(0);
+  const [priority, setPriority] = useState(1);
   const [assignment, setAssignment] = useState("member1");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredTodos, setFilteredTodos] = useState();
   const [displayTodos, setDisplayTodos] = useState(todos);
 
 
 
   const todoNameRef = useRef();
+  const searchRef = useRef();
 
   //タスクを追加
   const handleAddTodo = () => {
@@ -67,7 +83,8 @@ function App() {
       completed: false,
       date: selectedDate,
       priority: priority,
-      assignment: assignment
+      assignment: assignment,
+      child: []
     }
     
     setTodos((prevTodos) => {
@@ -122,25 +139,33 @@ function App() {
     fetchDog(todo);
   };
 
+  //childのboolean反転
+  const toggleChildTodo = (id) => {
+    const newTodos = [...todos];
+    const todo = newTodos.find((todo) => todo.child.id === id);
+    todo.child.completed = !todo.child.completed;
+    setTodos(newTodos);
+  }
+
   //checkがfalseの要素を消す
   const handleClear = () => {
     const newTodos = todos.filter((todo) => !todo.completed);
     setTodos(newTodos);
-    sortTodosByDate();
+    setDisplayTodos(newTodos);
   }
 
 
   //検索ボタン⇛検索関数
   const handleSearch = () => {
-    const newFilteredTodos = todos.filter((todo) => todo.name.includes(searchTerm));
-    setFilteredTodos(newFilteredTodos);
+    if(searchRef.current.value === "") return;
+    const newFilteredTodos = todos.filter((todo) => todo.name.includes(searchRef.current.value));
     setDisplayTodos(newFilteredTodos);
   };
 
 
   //重要度ソート
   const handleSortByPriorty = () => {
-    const sortedTodos = [...todos].sort((a, b) => {
+    const sortedTodos = [...displayTodos].sort((a, b) => {
       return a.priority - b.priority;
     });
     setDisplayTodos(sortedTodos);
@@ -193,12 +218,12 @@ function App() {
         </div>
       </div>
       <div className='px-10 py-5 bg-blue-200'>
-        <input type="text" onChange={(e) => setSearchTerm(e.target.value)} />
+        <input type="text" ref={searchRef} />
         <button onClick={() => handleSearch()}>検索</button>
         <button onClick={handleSortByPriorty}>重要度順</button>
-        <button onClick={handleReset}>　検索・ソート解除</button>
+        <button onClick={handleReset}>検索・ソート解除</button>
       </div>
-      <TodoList todos={displayTodos} toggleTodo={toggleTodo} />
+      <TodoList todos={displayTodos} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo}/>
       <div>残りのタスク：{todos.filter((todo) => !todo.completed).length}</div>
       {dogImage}
       {tips}
