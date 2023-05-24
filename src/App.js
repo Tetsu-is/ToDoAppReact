@@ -45,7 +45,7 @@ function App() {
       date: "2023-5-1",
       priority: "3",
       assignment: "Takeshi",
-      child: []
+      child: [child1]
     },
     {
       id: uuidv4(),
@@ -54,7 +54,7 @@ function App() {
       date: "2023-5-1",
       priority: "1",
       assignment: "Takeshi",
-      child: []
+      child: [child1]
     }
   ];
 
@@ -66,7 +66,6 @@ function App() {
   const [priority, setPriority] = useState(1);
   const [assignment, setAssignment] = useState("member1");
   const [displayTodos, setDisplayTodos] = useState(todos);
-
 
 
   const todoNameRef = useRef();
@@ -141,9 +140,16 @@ function App() {
 
   //childのboolean反転
   const toggleChildTodo = (id) => {
+    console.log("toggleChild!");
     const newTodos = [...todos];
-    const todo = newTodos.find((todo) => todo.child.id === id);
-    todo.child.completed = !todo.child.completed;
+    for(let todo of newTodos){
+      const child = todo.child.find((child) => child.id === id);
+      if(child) {
+        console.log("find!");
+        child.completed = !child.completed;
+        break;
+      }
+    }
     setTodos(newTodos);
   }
 
