@@ -19,6 +19,30 @@ function App() {
     completed: false
   }
 
+  const child3 = {
+    id: uuidv4(),
+    name: "c3",
+    completed: false
+  }
+
+  const child4 = {
+    id: uuidv4(),
+    name: "c4",
+    completed: false
+  }
+
+  const child5 = {
+    id: uuidv4(),
+    name: "c5",
+    completed: false
+  }
+
+  const child6 = {
+    id: uuidv4(),
+    name: "c6",
+    completed: false
+  }
+
   const sample = [
     {
       id: uuidv4(),
@@ -27,7 +51,7 @@ function App() {
       date: "2023-5-1",
       priority: "1",
       assignment: "Takeshi",
-      child: [child1]
+      children: [child1,child2]
     },
     {
       id: uuidv4(),
@@ -36,7 +60,16 @@ function App() {
       date: "2023-5-1",
       priority: "2",
       assignment: "Takeshi",
-      child: [child1,child2]
+      children: [child3,child4]
+    },
+    {
+      id: uuidv4(),
+      name: "仕事3",
+      completed: false,
+      date: "2023-5-1",
+      priority: "3",
+      assignment: "Takeshi",
+      children: [child5,child6]
     },
     {
       id: uuidv4(),
@@ -45,17 +78,8 @@ function App() {
       date: "2023-5-1",
       priority: "3",
       assignment: "Takeshi",
-      child: [child1]
+      children: []
     },
-    {
-      id: uuidv4(),
-      name: "家事2",
-      completed: false,
-      date: "2023-5-1",
-      priority: "1",
-      assignment: "Takeshi",
-      child: [child1]
-    }
   ];
 
   const [todos, setTodos] = useState(sample);
@@ -83,7 +107,7 @@ function App() {
       date: selectedDate,
       priority: priority,
       assignment: assignment,
-      child: []
+      children: []
     }
     
     setTodos((prevTodos) => {
@@ -140,18 +164,19 @@ function App() {
 
   //childのboolean反転
   const toggleChildTodo = (id) => {
-    console.log("toggleChild!");
+    console.log("toggleChild called");
     const newTodos = [...todos];
-    for(let todo of newTodos){
-      const child = todo.child.find((child) => child.id === id);
-      if(child) {
-        console.log("find!");
-        child.completed = !child.completed;
-        break;
+    for(const todo of newTodos){
+      const targetChild = todo.children.find((child)=>child.id===id);
+      if(targetChild){
+        console.log(targetChild.name);
+        targetChild.completed = !targetChild.completed;
       }
     }
     setTodos(newTodos);
   }
+
+  
 
   //checkがfalseの要素を消す
   const handleClear = () => {

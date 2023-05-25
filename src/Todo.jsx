@@ -4,9 +4,9 @@ import ChildTask from "./ChildTask";
 
 const Todo = ({ todo, toggleTodo, toggleChildTodo }) => {
 
-  const handleTodoClick = () => {
-    toggleTodo(todo.id);
-  };
+  const handleClick = () => {
+    alert("clicked");
+  }
 
   return (
     <div className="b-1 bg-green-400 p-5 mb-2 rounded-xl">
@@ -16,12 +16,13 @@ const Todo = ({ todo, toggleTodo, toggleChildTodo }) => {
           type="checkbox"
           checked={todo.completed}
           readOnly
-          onChange={handleTodoClick}
+          onChange={()=>toggleTodo(todo.id)}
         />
       </label>
       {todo.priority} {todo.name} {todo.date} {todo.assignment}
       </div>
-      < ChildTask child={todo.child} toggleChildTodo={toggleChildTodo}/>
+      < ChildTask children={todo.children} toggleChildTodo={toggleChildTodo}/>
+      <button onClick={handleClick} className="bg-red-500">Add tasks</button>
     </div>
   );
 };

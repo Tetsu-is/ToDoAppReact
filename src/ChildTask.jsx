@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
+/* import React, { useEffect } from "react"; */
 
-const ChildTask = ({ child, toggleChildTodo }) => {
-  const childTask = child.map((child) => {
+const ChildTask = ({ children, toggleChildTodo }) => {
+
+  const childTask = children.map((child) => {
     return (
       <div key={child.id}>
         <label>
