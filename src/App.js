@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import TodoList from './TodoList';
+import Modal from './Modal';
 import { v4 as uuidv4 } from 'uuid';
 import './input.css';
 import axios from 'axios';
@@ -51,7 +52,7 @@ function App() {
       date: "2023-5-1",
       priority: "1",
       assignment: "Takeshi",
-      children: [child1,child2]
+      children: [child1, child2]
     },
     {
       id: uuidv4(),
@@ -60,7 +61,7 @@ function App() {
       date: "2023-5-1",
       priority: "2",
       assignment: "Takeshi",
-      children: [child3,child4]
+      children: [child3, child4]
     },
     {
       id: uuidv4(),
@@ -69,7 +70,7 @@ function App() {
       date: "2023-5-1",
       priority: "3",
       assignment: "Takeshi",
-      children: [child5,child6]
+      children: [child5, child6]
     },
     {
       id: uuidv4(),
@@ -90,10 +91,12 @@ function App() {
   const [priority, setPriority] = useState(1);
   const [assignment, setAssignment] = useState("member1");
   const [displayTodos, setDisplayTodos] = useState(todos);
+  const [modalOpen, setModalOpen] = useState(false);
 
 
   const todoNameRef = useRef();
   const searchRef = useRef();
+  const modalInputRef = useRef();
 
   //タスクを追加
   const handleAddTodo = () => {
@@ -109,7 +112,7 @@ function App() {
       assignment: assignment,
       children: []
     }
-    
+
     setTodos((prevTodos) => {
       const updatedTodos = [...prevTodos, newTodo];
       const sortedTodos = sortTodosByDate(updatedTodos);
@@ -166,17 +169,15 @@ function App() {
   const toggleChildTodo = (id) => {
     console.log("toggleChild called");
     const newTodos = [...todos];
-    for(const todo of newTodos){
-      const targetChild = todo.children.find((child)=>child.id===id);
-      if(targetChild){
+    for (const todo of newTodos) {
+      const targetChild = todo.children.find((child) => child.id === id);
+      if (targetChild) {
         console.log(targetChild.name);
         targetChild.completed = !targetChild.completed;
       }
     }
     setTodos(newTodos);
   }
-
-  
 
   //checkがfalseの要素を消す
   const handleClear = () => {
@@ -188,7 +189,7 @@ function App() {
 
   //検索ボタン⇛検索関数
   const handleSearch = () => {
-    if(searchRef.current.value === "") return;
+    if (searchRef.current.value === "") return;
     const newFilteredTodos = todos.filter((todo) => todo.name.includes(searchRef.current.value));
     setDisplayTodos(newFilteredTodos);
   };
@@ -217,10 +218,19 @@ function App() {
     });
     return sortedTodos;
   };
-  
+
+  //modal
+  const handleClose = () => {
+
+  }
+
+  const handleSubmit = () => {
+    
+  }
 
   return (
     <div className='' style={{ padding: "50px" }}>
+      < Modal modalOpen={modalOpen} handleClose={handleClose} handleSubmit={handleSubmit} modalInputRef={modalInputRef}/>
       <div>{count}</div>
       <div>
         <div className='p-10 rounded-xl bg-red-400'>
@@ -252,7 +262,7 @@ function App() {
         <button onClick={handleSortByPriorty}>重要度順</button>
         <button onClick={handleReset}>検索・ソート解除</button>
       </div>
-      <TodoList todos={displayTodos} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo}/>
+      <TodoList todos={displayTodos} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo} />
       <div>残りのタスク：{todos.filter((todo) => !todo.completed).length}</div>
       {dogImage}
       {tips}
