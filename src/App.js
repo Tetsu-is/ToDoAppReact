@@ -183,8 +183,6 @@ function App() {
     setDisplayTodos(todos);
   }
 
-
-
   //todo更新時に日付順にソートする
   const sortTodosByDate = (todos) => {
     const sortedTodos = [...todos].sort((a, b) => {
