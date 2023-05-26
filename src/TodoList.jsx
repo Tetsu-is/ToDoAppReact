@@ -3,11 +3,12 @@ import Todo from "./Todo";
 import "./input.css";
 
 const TodoList = ({ todos, toggleTodo, toggleChildTodo, toggleModal }) => {
+  const list = todos.map((todo) => (
+    <Todo todo={todo} key={todo.id} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo} toggleModal={toggleModal} />
+  ))
   return (
     <div className='p-10'>
-      {todos.map((todo) => (
-        <Todo todo={todo} key={todo.id} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo} toggleModal={toggleModal} />
-      ))}
+      {list}
     </div>
   );
 };

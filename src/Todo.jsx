@@ -5,7 +5,7 @@ import ChildTask from "./ChildTask";
 const Todo = ({ todo, toggleTodo, toggleChildTodo, toggleModal }) => {
 
   const handleClick = () => {
-    toggleModal(todo);
+    toggleModal(todo.id);
   }
 
   return (

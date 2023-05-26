@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
 import './input.css';
 import axios from 'axios';
+import Modal from './Modal';
 
 function App() {
   //todoのサンプル
@@ -82,7 +83,7 @@ function App() {
     },
   ];
 
-  const [todos, setTodos] = useState(sample);
+  const [todos, setTodos] = useState([]);
   const [dogImage, setDogImage] = useState();
   const [count, setCount] = useState(0);
   const [tips, setTips] = useState();
@@ -91,12 +92,12 @@ function App() {
   const [assignment, setAssignment] = useState("member1");
   const [displayTodos, setDisplayTodos] = useState(todos);
   const [modalOpen, setModalOpen] = useState(false);
+  const [tempTodoId, setTempTodoId] = useState();
 
 
   const todoNameRef = useRef();
   const searchRef = useRef();
   const modalInputRef = useRef();
-
   //タスクを追加
   const handleAddTodo = () => {
     const name = todoNameRef.current.value;
@@ -115,7 +116,7 @@ function App() {
     setTodos((prevTodos) => {
       const updatedTodos = [...prevTodos, newTodo];
       const sortedTodos = sortTodosByDate(updatedTodos);
-      setDisplayTodos(sortedTodos);
+      setTodos(sortedTodos);
       return sortedTodos;
     });
 
@@ -182,7 +183,6 @@ function App() {
   const handleClear = () => {
     const newTodos = todos.filter((todo) => !todo.completed);
     setTodos(newTodos);
-    setDisplayTodos(newTodos);
   }
 
 
@@ -218,20 +218,47 @@ function App() {
     return sortedTodos;
   };
 
+  useEffect(()=>{
+    setDisplayTodos(todos);
+  },[todos])
+
   //modal
 
-  const toggleModal = (todo) => {
+  const handleClose = () => {
+    setModalOpen(false);
+  }
+
+  const toggleModal = (id) => {
     setModalOpen(true);
-    console.log("modalKitayo" + todo.name);
+    setTempTodoId(id);
   }
 
   const handleSubmit = () => {
-    setModalOpen(false);
+    console.log("submit");
+    if(!modalInputRef.current.value) return;
+    console.log("refあり");
+    const child = 
+      {
+        id: uuidv4(),
+        name: modalInputRef.current.value,
+        completed: false
+      }
+    const newTodos = [...todos];
+    const targetTodo = newTodos.find((todo) => todo.id === tempTodoId);
+    targetTodo.children = [...targetTodo.children, child];
+    setTodos(newTodos);
+    modalInputRef.current.value = null;
   }
 
   return (
     <div className='' style={{ padding: "50px" }}>
       <div>{count}</div>
+      < Modal
+        modalOpen={modalOpen}
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+        modalInputRef={modalInputRef}
+      />
       <div>
         <div className='p-10 rounded-xl bg-red-400'>
           <input className='justify-around mr-2 rounded-sm p-1' type='text' ref={todoNameRef} />
@@ -262,7 +289,12 @@ function App() {
         <button onClick={handleSortByPriorty}>重要度順</button>
         <button onClick={handleReset}>検索・ソート解除</button>
       </div>
-      <TodoList todos={displayTodos} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo} toggleModal={toggleModal} />
+      <TodoList
+        todos={displayTodos}
+        toggleTodo={toggleTodo}
+        toggleChildTodo={toggleChildTodo}
+        toggleModal={toggleModal}
+      />
       <div>残りのタスク：{todos.filter((todo) => !todo.completed).length}</div>
       {dogImage}
       {tips}
