@@ -2,10 +2,10 @@ import React from "react";
 import "./input.css";
 import ChildTask from "./ChildTask";
 
-const Todo = ({ todo, toggleTodo, toggleChildTodo }) => {
+const Todo = ({ todo, toggleTodo, toggleChildTodo, toggleModal }) => {
 
   const handleClick = () => {
-    alert("clicked");
+    toggleModal(todo);
   }
 
   return (
@@ -21,7 +21,7 @@ const Todo = ({ todo, toggleTodo, toggleChildTodo }) => {
       </label>
       {todo.priority} {todo.name} {todo.date} {todo.assignment}
       </div>
-      < ChildTask children={todo.children} toggleChildTodo={toggleChildTodo}/>
+      < ChildTask children={todo.children} toggleChildTodo={toggleChildTodo} />
       <button onClick={handleClick} className="bg-red-500">Add tasks</button>
     </div>
   );

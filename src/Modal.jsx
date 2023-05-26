@@ -1,18 +1,10 @@
-import React from "react";
+import React from 'react';
 import "./input";
 
-const InputModal = ({ modalOpen, handleClose, handleSubmit, modalInputRef }) => {
-  if (!modalOpen) return null;
-
+const Modal = () => {
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={handleClose}>&times;</span>
-        <input type='text' ref={modalInputRef} />
-        <button onClick={handleSubmit}>Submit</button>
-      </div>
-    </div>
-  );
-};
+    <div>Modal</div>
+  )
+}
 
-export default InputModal;
+export default Modal

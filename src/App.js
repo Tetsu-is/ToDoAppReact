@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import TodoList from './TodoList';
-import Modal from './Modal';
 import { v4 as uuidv4 } from 'uuid';
 import './input.css';
 import axios from 'axios';
@@ -220,17 +219,18 @@ function App() {
   };
 
   //modal
-  const handleClose = () => {
 
+  const toggleModal = (todo) => {
+    setModalOpen(true);
+    console.log("modalKitayo" + todo.name);
   }
 
   const handleSubmit = () => {
-    
+    setModalOpen(false);
   }
 
   return (
     <div className='' style={{ padding: "50px" }}>
-      < Modal modalOpen={modalOpen} handleClose={handleClose} handleSubmit={handleSubmit} modalInputRef={modalInputRef}/>
       <div>{count}</div>
       <div>
         <div className='p-10 rounded-xl bg-red-400'>
@@ -262,7 +262,7 @@ function App() {
         <button onClick={handleSortByPriorty}>重要度順</button>
         <button onClick={handleReset}>検索・ソート解除</button>
       </div>
-      <TodoList todos={displayTodos} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo} />
+      <TodoList todos={displayTodos} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo} toggleModal={toggleModal} />
       <div>残りのタスク：{todos.filter((todo) => !todo.completed).length}</div>
       {dogImage}
       {tips}
