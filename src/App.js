@@ -89,6 +89,7 @@ function App() {
   const [tips, setTips] = useState();
   const [selectedDate, setSelectedDate] = useState();
   const [priority, setPriority] = useState(1);
+  const [genre, setGenre] = useState("仕事")
   const [assignment, setAssignment] = useState("member1");
   const [displayTodos, setDisplayTodos] = useState(todos);
   const [modalOpen, setModalOpen] = useState(false);
@@ -109,6 +110,7 @@ function App() {
       completed: false,
       date: selectedDate,
       priority: priority,
+      genre: genre,
       assignment: assignment,
       children: []
     }
@@ -195,7 +197,7 @@ function App() {
 
 
   //重要度ソート
-  const handleSortByPriorty = () => {
+  const handleSortByPriority = () => {
     const sortedTodos = [...displayTodos].sort((a, b) => {
       return a.priority - b.priority;
     });
@@ -218,9 +220,9 @@ function App() {
     return sortedTodos;
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setDisplayTodos(todos);
-  },[todos])
+  }, [todos])
 
   //modal
 
@@ -235,14 +237,14 @@ function App() {
 
   const handleSubmit = () => {
     console.log("submit");
-    if(!modalInputRef.current.value) return;
+    if (!modalInputRef.current.value) return;
     console.log("refあり");
-    const child = 
-      {
-        id: uuidv4(),
-        name: modalInputRef.current.value,
-        completed: false
-      }
+    const child =
+    {
+      id: uuidv4(),
+      name: modalInputRef.current.value,
+      completed: false
+    }
     const newTodos = [...todos];
     const targetTodo = newTodos.find((todo) => todo.id === tempTodoId);
     targetTodo.children = [...targetTodo.children, child];
@@ -251,7 +253,7 @@ function App() {
   }
 
   return (
-    <div className='' style={{ padding: "50px" }}>
+    <div>
       <div>{count}</div>
       < Modal
         modalOpen={modalOpen}
@@ -259,7 +261,7 @@ function App() {
         handleSubmit={handleSubmit}
         modalInputRef={modalInputRef}
       />
-      <div>
+      <div style={{ padding: '50px' }}>
         <div className='p-10 rounded-xl bg-red-400'>
           <input className='justify-around mr-2 rounded-sm p-1' type='text' ref={todoNameRef} />
           <input className='justify-around mr-2 rounded-sm p-1' type='date' onChange={(e) => setSelectedDate(e.target.value)} />
@@ -268,10 +270,9 @@ function App() {
             <option value="2">中</option>
             <option value="3">低</option>
           </select>
-          <select className='mr-2 rounded-sm p-1'>
-            <option value="work">仕事</option>
-            <option value="housework">家事</option>
-            <option value="friend">友人</option>
+          <select className='mr-2 rounded-sm p-1' onChange={(e) => setGenre(e.target.value)}>
+            <option value="仕事">仕事</option>
+            <option value="プライベート">プライベート</option>
           </select>
           <select className='mr-2 rounded-sm p-1' onChange={(e) => setAssignment(e.target.value)}>
             <option value="member1">メンバー１</option>
@@ -279,22 +280,22 @@ function App() {
             <option value="member3">メンバー３</option>
             <option value="member3">メンバー４</option>
           </select>
-          <button className='bg-white mr-2 rounded-sm p-1' onClick={handleAddTodo}>タスクを追加</button>
+          <button className='bg-white mr-2 rounded-sm px-5 py-1' onClick={handleAddTodo}> 追加 + </button>
           <button className='bg-white rounded-sm p-1' onClick={handleClear}>タスクを削除</button>
         </div>
+        <div className='px-10 py-5 bg-blue-200'>
+          <input type="text" ref={searchRef} />
+          <button onClick={() => handleSearch()}>検索</button>
+          <button onClick={handleSortByPriority}>重要度順</button>
+          <button onClick={handleReset}>検索・ソート解除</button>
+        </div>
+        <TodoList
+          todos={displayTodos}
+          toggleTodo={toggleTodo}
+          toggleChildTodo={toggleChildTodo}
+          toggleModal={toggleModal}
+        />
       </div>
-      <div className='px-10 py-5 bg-blue-200'>
-        <input type="text" ref={searchRef} />
-        <button onClick={() => handleSearch()}>検索</button>
-        <button onClick={handleSortByPriorty}>重要度順</button>
-        <button onClick={handleReset}>検索・ソート解除</button>
-      </div>
-      <TodoList
-        todos={displayTodos}
-        toggleTodo={toggleTodo}
-        toggleChildTodo={toggleChildTodo}
-        toggleModal={toggleModal}
-      />
       <div>残りのタスク：{todos.filter((todo) => !todo.completed).length}</div>
       {dogImage}
       {tips}

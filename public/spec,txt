@@ -1,9 +1,9 @@
 【課題内容】
 <ライブラリ・APIの利用系>
 　- tailwindcss をインストールして、リデザインする
-　- Dog API を使って、TODOが完了したタイミングで犬の画像を表示させる
+　- Dog API を使って、TODOが完了したタイミングで犬の画像を表示させる done
 　- [https://dog.ceo/dog-api/](https://dog.ceo/dog-api/)
-　- TODOを3つ完了させるたびに、Tipsを表示させる
+　- TODOを3つ完了させるたびに、Tipsを表示させる done
 　- [https://api.adviceslip.com/#endpoint-random](https://api.adviceslip.com/#endpoint-random)
 　- 上記を含めてテストコードを書く
 
@@ -12,5 +12,5 @@
 　- タスクのアサイン機能を追加する done
 　- 親タスク・子タスクの管理機能を追加する done
 　- タスクのフィルタリング・並び替え・ソート機能を追加する
-　- タスクの重要度設定・閲覧機能を追加する
+　- タスクの重要度設定・閲覧機能を追加する done
 　- その他、追加したい機能があれば
