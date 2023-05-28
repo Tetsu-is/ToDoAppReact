@@ -7,7 +7,7 @@ const TodoList = ({ todos, toggleTodo, toggleChildTodo, toggleModal }) => {
     <Todo todo={todo} key={todo.id} toggleTodo={toggleTodo} toggleChildTodo={toggleChildTodo} toggleModal={toggleModal} />
   ))
   return (
-    <div className='p-10'>
+    <div className='pt-0 p-10'>
       {list}
     </div>
   );

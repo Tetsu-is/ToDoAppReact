@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
 import './input.css';
-import axios from 'axios';
 import Modal from './Modal';
 
 function App() {
@@ -139,12 +138,13 @@ function App() {
   //犬の画像を取得
   const fetchDog = async (todo) => {
     try {
-      const response = await axios.get("https://dog.ceo/api/breeds/image/random");
-      const imageUrl = response.data.message;
+      const response = await fetch("https://dog.ceo/api/breeds/image/random");
+      const data = await response.json();
+      const imageUrl = data.message;
 
       if (todo.completed === true) {
         setDogImage(
-          <img src={imageUrl} alt='dogImage' style={{ height: "120px", width: "auto" }} />
+          <img src={imageUrl} alt='dogImage' style={{ height: "80px", width: "auto" }} />
         )
         setCount(prevCount => prevCount += 1)
         if (count % 3 === 2) {
@@ -159,8 +159,9 @@ function App() {
   //Tipsを取得
   const fetchTips = async () => {
     try {
-      const response = await axios.get("https://api.adviceslip.com/advice");
-      const tip = response.data.slip.advice;
+      const response = await fetch("https://api.adviceslip.com/advice");
+      const data = await response.json();
+      const tip = data.slip.advice;
       setTips(<p>{tip}</p>);
     } catch (error) {
       console.error('Error fetching data: ', error);
@@ -306,6 +307,13 @@ function App() {
           <button className='mr-2 py-0.5 p-1 px-2 bg-white rounded-md' onClick={handleSortByPriority}>重要度順</button>
           <button className='bg-white py-0.5 px-2 p-1 rounded-md' onClick={handleReset}>検索・ソート解除</button>
         </div>
+        <div className='px-10'>
+          <div className='dog flex p-2 border-b-2'>
+            <div className='mx-10'>{dogImage}</div>
+            <div className='bg-gray-300 rounded-full mt-10 text-lg py-1 px-10'>{tips}</div>
+          </div>
+        </div>
+
         <TodoList
           todos={displayTodos}
           toggleTodo={toggleTodo}
@@ -314,8 +322,6 @@ function App() {
         />
       </div>
       <div>残りのタスク：{todos.filter((todo) => !todo.completed).length}</div>
-      {dogImage}
-      {tips}
     </div>
   );
 }
