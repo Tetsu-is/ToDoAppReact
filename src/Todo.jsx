@@ -19,6 +19,7 @@ const Todo = ({ todo, toggleTodo, toggleChildTodo, toggleModal }) => {
         return "";
     }
   };
+  console.log(getColor(todo.priority));
 
   const overDue = (todo) => {
     const today = new Date();
@@ -31,28 +32,35 @@ const Todo = ({ todo, toggleTodo, toggleChildTodo, toggleModal }) => {
   };
 
   return (
-    <div className="b-1 p-5 border-b-2 flex">
-      <div className="flex justify-between"></div>
-      <label className="text-lg">
-        <input
-          className="mr-5"
-          style={{ transform: "scale(1.5)" }}
-          type="checkbox"
-          checked={todo.completed}
-          readOnly
-          onChange={() => toggleTodo(todo.id)}
-        />
-      </label>
-      <div
-        className={`w-4 h-4 mt-2 rounded-full ${getColor(todo.priority)} mr-2`}
-      ></div>
-      {todo.name}
-      <div className={`mr-2 ${overDue(todo)}`}>{todo.date}</div>
-      {todo.genre} {todo.assignment}
-      <ChildTask children={todo.children} toggleChildTodo={toggleChildTodo} />
-      <button onClick={handleClick} className="bg-red-500">
-        追加 +
-      </button>
+    <div className="p-5 border-b-2">
+      <div className="text-lg flex">
+        <label className="mr-5">
+          <input
+            className="mr-1"
+            style={{ transform: "scale(1.5)" }}
+            type="checkbox"
+            checked={todo.completed}
+            readOnly
+            onChange={() => toggleTodo(todo.id)}
+          />
+        </label>
+        <div
+          className={`mt-2 w-4 h-4 rounded-full ${getColor(
+            todo.priority
+          )} mr-2`}
+        ></div>
+        <div>{todo.name}</div>
+      </div>
+
+      <div className={`ml-10 ${overDue(todo)}`}>{todo.date}</div>
+      <div className="text-gray-700 ml-10">{todo.genre}</div>
+      <div className="text-gray-700 ml-10">担当：{todo.assignment}</div>
+      <div className="childrenBox pl-10">
+        <ChildTask children={todo.children} toggleChildTodo={toggleChildTodo} />
+        <button onClick={handleClick} className="rounded-md border border-gray-500">
+          追加 +
+        </button>
+      </div>
     </div>
   );
 };

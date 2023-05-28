@@ -50,7 +50,8 @@ function App() {
       name: "仕事１",
       completed: false,
       date: "2023-5-1",
-      priority: "1",
+      priority: 1,
+      genre: "仕事",
       assignment: "Takeshi",
       children: [child1, child2]
     },
@@ -58,8 +59,9 @@ function App() {
       id: uuidv4(),
       name: "仕事2",
       completed: false,
-      date: "2023-5-1",
-      priority: "2",
+      date: "2023-6-1",
+      priority: 2,
+      genre: "仕事",
       assignment: "Takeshi",
       children: [child3, child4]
     },
@@ -67,8 +69,9 @@ function App() {
       id: uuidv4(),
       name: "仕事3",
       completed: false,
-      date: "2023-5-1",
-      priority: "3",
+      date: "2023-6-25",
+      priority: 3,
+      genre: "仕事",
       assignment: "Takeshi",
       children: [child5, child6]
     },
@@ -76,18 +79,25 @@ function App() {
       id: uuidv4(),
       name: "家事１",
       completed: false,
-      date: "2023-5-1",
-      priority: "3",
+      date: "2023-6-1",
+      priority: 3,
+      genre: "プライベート",
       assignment: "Takeshi",
       children: []
     },
   ];
 
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
+  const currentDate = `${year}-${month}-${day}`;
+
   const [todos, setTodos] = useState([]);
   const [dogImage, setDogImage] = useState();
   const [count, setCount] = useState(0);
   const [tips, setTips] = useState();
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(currentDate);
   const [priority, setPriority] = useState(1);
   const [genre, setGenre] = useState("仕事")
   const [assignment, setAssignment] = useState("member1");
@@ -122,7 +132,6 @@ function App() {
       return sortedTodos;
     });
 
-    console.log(todos);
 
     todoNameRef.current.value = null;
   };
@@ -210,7 +219,7 @@ function App() {
     setDisplayTodos(todos);
   }
 
-  //todo更新時に日付順にソートする
+  //日付順にソートする
   const sortTodosByDate = (todos) => {
     const sortedTodos = [...todos].sort((a, b) => {
       const dateA = new Date(a.date);
@@ -221,7 +230,8 @@ function App() {
   };
 
   useEffect(() => {
-    setDisplayTodos(todos);
+    const newTodos = sortTodosByDate(todos);
+    setDisplayTodos(newTodos);
   }, [todos])
 
   //modal
@@ -249,21 +259,27 @@ function App() {
     const targetTodo = newTodos.find((todo) => todo.id === tempTodoId);
     targetTodo.children = [...targetTodo.children, child];
     setTodos(newTodos);
+    setModalOpen(false);
     modalInputRef.current.value = null;
+  }
+
+  const handleDemo = () => {
+    setTodos(sample);
   }
 
   return (
     <div>
-      <div>{count}</div>
+      <button className='bg-gray-500 p-1' onClick={handleDemo}>デモタスクを追加する</button>
       < Modal
         modalOpen={modalOpen}
         handleClose={handleClose}
         handleSubmit={handleSubmit}
         modalInputRef={modalInputRef}
       />
-      <div style={{ padding: '50px' }}>
-        <div className='p-10 rounded-xl bg-red-400'>
-          <input className='justify-around mr-2 rounded-sm p-1' type='text' ref={todoNameRef} />
+      <div style={{ padding: '30px' }}>
+        <div className='addingTask p-5 rounded-md bg-gray-300'>
+          <h1 className='text-xl'>タスクを追加＋</h1>
+          <input className='justify-around mr-2 rounded-sm p-1 placeholder:text-gray-500' type='text' ref={todoNameRef} placeholder=' タスクの名前' />
           <input className='justify-around mr-2 rounded-sm p-1' type='date' onChange={(e) => setSelectedDate(e.target.value)} />
           <select className='mr-2 rouded-sm p-1' onChange={(e) => setPriority(parseInt(e.target.value))}>
             <option value="1">高</option>
@@ -281,13 +297,14 @@ function App() {
             <option value="member3">メンバー４</option>
           </select>
           <button className='bg-white mr-2 rounded-sm px-5 py-1' onClick={handleAddTodo}> 追加 + </button>
-          <button className='bg-white rounded-sm p-1' onClick={handleClear}>タスクを削除</button>
+          <button className='bg-white rounded-sm p-1 px-5' onClick={handleClear}>タスクを削除</button>
         </div>
-        <div className='px-10 py-5 bg-blue-200'>
-          <input type="text" ref={searchRef} />
-          <button onClick={() => handleSearch()}>検索</button>
-          <button onClick={handleSortByPriority}>重要度順</button>
-          <button onClick={handleReset}>検索・ソート解除</button>
+        <div className='searching m-5 rounded-full px-10 py-1 bg-blue-200'>
+          <h1 className='text-md'>タスクを検索</h1>
+          <input className='mr-2 rounded-md placeholder:text-gray-500' type="text" ref={searchRef} placeholder=' タスク名で検索' />
+          <button className='mr-2 py-0.5 p-1 px-2 bg-white rounded-md' onClick={() => handleSearch()}>検索</button>
+          <button className='mr-2 py-0.5 p-1 px-2 bg-white rounded-md' onClick={handleSortByPriority}>重要度順</button>
+          <button className='bg-white py-0.5 px-2 p-1 rounded-md' onClick={handleReset}>検索・ソート解除</button>
         </div>
         <TodoList
           todos={displayTodos}

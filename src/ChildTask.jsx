@@ -5,7 +5,7 @@ const ChildTask = ({ children, toggleChildTodo }) => {
 
   const childTask = children.map((child) => {
     return (
-      <div key={child.id}>
+      <div className="mr-5" key={child.id}>
         <label>
           <input
             type="checkbox"
@@ -19,7 +19,7 @@ const ChildTask = ({ children, toggleChildTodo }) => {
     );
   });
 
-  return <div>{childTask}</div>;
+  return <div className="flex">{childTask}</div>;
 };
 
 export default ChildTask;
