@@ -138,7 +138,7 @@ function App() {
   //犬の画像を取得
   const fetchDog = async (todo) => {
     try {
-      const response = await fetch("https://dog.ceo/api/breeds/image/random");
+      const response = await fetch("/dogAPI");
       const data = await response.json();
       const imageUrl = data.message;
 
