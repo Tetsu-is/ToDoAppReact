@@ -281,24 +281,24 @@ function App() {
         <div className='addingTask p-5 rounded-md bg-gray-300'>
           <h1 className='text-xl'>タスクを追加＋</h1>
           <input className='justify-around mr-2 rounded-sm p-1 placeholder:text-gray-500' type='text' ref={todoNameRef} placeholder=' タスクの名前' />
-          <input className='justify-around mr-2 rounded-sm p-1' type='date' onChange={(e) => setSelectedDate(e.target.value)} />
-          <select className='mr-2 rouded-sm p-1' onChange={(e) => setPriority(parseInt(e.target.value))}>
-            <option value="1">高</option>
-            <option value="2">中</option>
-            <option value="3">低</option>
+          <input className='justify-around mr-2 rounded-sm p-1' type='date' placeholder='タスクの期日' onChange={(e) => setSelectedDate(e.target.value)} />
+          <select className='mr-2 rouded-sm p-1' data-testid="select-priority" onChange={(e) => setPriority(parseInt(e.target.value))}>
+            <option value="1" data-testid="select-priority-option">高</option>
+            <option value="2" data-testid="select-priority-option">中</option>
+            <option value="3" data-testid="select-priority-option">低</option>
           </select>
-          <select className='mr-2 rounded-sm p-1' onChange={(e) => setGenre(e.target.value)}>
-            <option value="仕事">仕事</option>
-            <option value="プライベート">プライベート</option>
+          <select className='mr-2 rounded-sm p-1' data-testid="select-genre" onChange={(e) => setGenre(e.target.value)}>
+            <option value="仕事" data-testid="select-genre-option">仕事</option>
+            <option value="プライベート" data-testid="select-genre-option">プライベート</option>
           </select>
-          <select className='mr-2 rounded-sm p-1' onChange={(e) => setAssignment(e.target.value)}>
-            <option value="member1">メンバー１</option>
-            <option value="member2">メンバー２</option>
-            <option value="member3">メンバー３</option>
-            <option value="member3">メンバー４</option>
+          <select className='mr-2 rounded-sm p-1' data-testid='select-assignment' onChange={(e) => setAssignment(e.target.value)}>
+            <option value="member1" data-testid='select-assignment-option'>メンバー１</option>
+            <option value="member2" data-testid='select-assignment-option'>メンバー２</option>
+            <option value="member3" data-testid='select-assignment-option'>メンバー３</option>
+            <option value="member3" data-testid='select-assignment-option'>メンバー４</option>
           </select>
-          <button className='bg-white mr-2 rounded-sm px-5 py-1' onClick={handleAddTodo}> 追加 + </button>
-          <button className='bg-white rounded-sm p-1 px-5' onClick={handleClear}>タスクを削除</button>
+          <button className='bg-white mr-2 rounded-sm px-5 py-1' data-testid='adding-task-button' onClick={handleAddTodo}> 追加 + </button>
+          <button className='bg-white rounded-sm p-1 px-5' data-testid='adding-delete-button' onClick={handleClear}>タスクを削除</button>
         </div>
         <div className='searching m-5 rounded-full px-10 py-1 bg-blue-200'>
           <h1 className='text-md'>タスクを検索</h1>
