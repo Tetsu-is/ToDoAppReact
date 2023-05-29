@@ -138,13 +138,13 @@ function App() {
   //犬の画像を取得
   const fetchDog = async (todo) => {
     try {
-      const response = await fetch("/dogAPI");
+      const response = await fetch("https://dog.ceo/api/breeds/image/random");
       const data = await response.json();
       const imageUrl = data.message;
 
       if (todo.completed === true) {
         setDogImage(
-          <img src={imageUrl} alt='dogImage' style={{ height: "80px", width: "auto" }} />
+          <img src={imageUrl} alt='dogImage' data-testid='dogImage' style={{ height: "80px", width: "auto" }} />
         )
         setCount(prevCount => prevCount += 1)
         if (count % 3 === 2) {
@@ -321,7 +321,6 @@ function App() {
           toggleModal={toggleModal}
         />
       </div>
-      <div>残りのタスク：{todos.filter((todo) => !todo.completed).length}</div>
     </div>
   );
 }

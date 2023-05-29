@@ -14,3 +14,40 @@
 　- タスクのフィルタリング・並び替え・ソート機能を追加する done
 　- タスクの重要度設定・閲覧機能を追加する done
 　- その他、追加したい機能があれば
+
+
+// Dog image APIのmock
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve({ message: "testImageUrl" }),
+    })
+  );
+
+
+  test("fetches dog image and updates state on todo click", async () => {
+    // setDogImageをモックします
+    const setDogImage = jest.fn();
+
+    // Appコンポーネントをレンダリングします
+    const { getByText, getByTestId, getByPlaceholderText } = render(<App setDogImage={setDogImage} />);
+
+    //
+    const taskName = "New Task";
+    fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
+    fireEvent.click(getByTestId('adding-task-button'));
+
+    // Todoアイテムを取得し、クリックします
+    const todoItem = getByText(taskName);
+    fireEvent.click(todoItem);
+
+    // fetchDogが呼び出され、setDogImageが正しい引数で呼び出されたことを確認します
+    expect(setDogImage).toHaveBeenCalledTimes(1);
+    expect(setDogImage).toHaveBeenCalledWith(
+      <img
+        src="testImageUrl"
+        alt="dogImage"
+        data-testid="dogImage"
+        style={{ height: "80px", width: "auto" }}
+      />
+    );
+  });

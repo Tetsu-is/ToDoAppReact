@@ -19,7 +19,6 @@ const Todo = ({ todo, toggleTodo, toggleChildTodo, toggleModal }) => {
         return "";
     }
   };
-  console.log(getColor(todo.priority));
 
   const overDue = (todo) => {
     const today = new Date();

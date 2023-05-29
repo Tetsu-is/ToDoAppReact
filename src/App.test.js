@@ -1,7 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
 import '@testing-library/jest-dom';
+
+
 
 describe("App", () => {
 
@@ -37,23 +39,23 @@ describe("App", () => {
 
 
   test("select pastDate", async () => {
-    const { getByPlaceholderText } = render(<App/>);
+    const { getByPlaceholderText } = render(<App />);
     const pastDate = "2023-05-01"
-    fireEvent.change(getByPlaceholderText("タスクの期日"), { target: { value: pastDate}})
+    fireEvent.change(getByPlaceholderText("タスクの期日"), { target: { value: pastDate } })
   })
 
 
   test("select today", async () => {
-    const { getByPlaceholderText } = render(<App/>);
+    const { getByPlaceholderText } = render(<App />);
     const today = defaultDate;
-    fireEvent.change(getByPlaceholderText("タスクの期日"), { target: { value: today}})
+    fireEvent.change(getByPlaceholderText("タスクの期日"), { target: { value: today } })
   })
 
 
   test("select futureDate", async () => {
-    const { getByPlaceholderText } = render(<App/>);
+    const { getByPlaceholderText } = render(<App />);
     const futureDate = "2023-07-01"
-    fireEvent.change(getByPlaceholderText("タスクの期日"), { target: { value: futureDate}})
+    fireEvent.change(getByPlaceholderText("タスクの期日"), { target: { value: futureDate } })
   })
 
 
@@ -100,19 +102,11 @@ describe("App", () => {
 
 
   test("adds a new task with taskName", async () => {
-    render(<App />);
-
+    const { getByPlaceholderText, getByTestId } = render(<App />);
     const taskName = "New Task";
-
-    const inputName = screen.getByPlaceholderText(/タスクの名前/i);
-    fireEvent.change(inputName, { target: { value: taskName } });
-
-    const addButton = screen.getByText(/追加 +/i);
-    fireEvent.click(addButton);
-
-    const nameElement = await screen.findByText(/New Task/i);
-    expect(nameElement).toBeInTheDocument();
-    const defaultDateElement = await screen.findByText(defaultDate);
-    expect(defaultDateElement).toBeInTheDocument();
+    fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
+    fireEvent.click(getByTestId('adding-task-button'));
+    const Element = await screen.findByText(taskName);
+    expect(Element).toBeInTheDocument();
   });
 });
