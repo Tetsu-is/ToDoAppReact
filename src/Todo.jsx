@@ -41,6 +41,7 @@ const Todo = ({ todo, toggleTodo, toggleChildTodo, toggleModal }) => {
             checked={todo.completed}
             readOnly
             onChange={() => toggleTodo(todo.id)}
+            data-testid="checkbox"
           />
         </label>
         <div

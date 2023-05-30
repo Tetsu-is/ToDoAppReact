@@ -1,11 +1,15 @@
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
 import '@testing-library/jest-dom';
+import nock from 'nock';
 
 
 
 describe("App", () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   const today = new Date();
   const day = String(today.getDate()).padStart(2, '0');
@@ -109,4 +113,53 @@ describe("App", () => {
     const Element = await screen.findByText(taskName);
     expect(Element).toBeInTheDocument();
   });
+
+  test('fetchDog function retrieves data correctly', async () => {
+    const dogApiResponse = {
+      message: 'https://images.dog.ceo/breeds/dog-image.jpg',
+      status: 'success'
+    };
+
+    nock('https://dog.ceo')
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/api/breeds/image/random')
+      .reply(200, dogApiResponse);
+
+    const {getByPlaceholderText, getByTestId} = render(<App />);
+
+    const taskName = "New Task";
+    fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
+    fireEvent.click(getByTestId('adding-task-button'));
+    const checkBox = screen.getByTestId('checkbox');
+    fireEvent.click(checkBox);
+    await waitFor(() => screen.getByTestId('dogImage'));
+    expect(screen.getByTestId('dogImage')).toHaveAttribute('src', 'https://images.dog.ceo/breeds/dog-image.jpg');
+  });
+
+  /* test('fetchTips function retrieves data correctly', async () => {
+    const tipsApiResponse = {
+      slip: {
+        id: 1,
+        advice: 'Test advice'
+      }
+    };
+
+    nock('https://api.adviceslip.com')
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/advice')
+      .reply(200, tipsApiResponse);
+
+      const {getByPlaceholderText, getByTestId} = render(<App />);
+
+    const taskName = "New Task";
+    fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
+    fireEvent.click(getByTestId('adding-task-button'));
+    const checkBox = screen.getByTestId('checkbox'); 
+    for(let i = 0; i < 6; i ++){
+      fireEvent.click(checkBox);
+    }
+
+    await waitFor(() => screen.getByTestId('checkbox'));
+    expect(screen.getByText('checkbox')).toBeInTheDocument();
+  }); */
 });
