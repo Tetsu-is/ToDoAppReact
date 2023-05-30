@@ -162,7 +162,7 @@ function App() {
       const response = await fetch("https://api.adviceslip.com/advice");
       const data = await response.json();
       const tip = data.slip.advice;
-      setTips(<p data-testid='checkbox'>{tip}</p>);
+      setTips(<p data-testid='tips'>{tip}</p>);
     } catch (error) {
       console.error('Error fetching data: ', error);
     }

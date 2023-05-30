@@ -137,17 +137,29 @@ describe("App", () => {
   });
 
   test('fetchTips function retrieves data correctly', async () => {
-    const fetchTips = jest.fn(async () => {
-      try {
-        const response = await fetch("/Tips");
-        const data = await response.json();
-        const tip = data.slip.advice;
-      } catch (error) {
-        console.log('Error fetching data: ', error);
-      }
-    })
-    const { getByText } = render(<App />);
-    await waitFor(() => screen.getByText("Tips."));
-    expect(screen.getByText("Tips.")).toBeInTheDocument();
+    const tipsApiResponse = {
+      slip: {
+        slip_id: "2",
+        advice: "Tips."
+    }
+    };
+
+    nock('https://api.adviceslip.com')
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/advise')
+      .reply(200, tipsApiResponse);
+
+    
+
+    const { getByTestId, findByText, getByPlaceholderText } = render(<App />);
+    const taskName = "New Task";
+    fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
+    fireEvent.click(getByTestId('adding-task-button'));
+    const checkBox = screen.getByTestId('checkbox');
+    for (let i = 0; i < 6; i++) {
+      fireEvent.click(checkBox);
+    }
+    const tipsElement = await waitFor(() => findByText("Tips."));
+    expect(tipsElement).toBeInTheDocument();
   });
 });
