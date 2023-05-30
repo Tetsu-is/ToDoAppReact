@@ -57,7 +57,7 @@ const Todo = ({ todo, toggleTodo, toggleChildTodo, toggleModal }) => {
       <div className="text-gray-700 ml-10">担当：{todo.assignment}</div>
       <div className="childrenBox pl-10">
         <ChildTask children={todo.children} toggleChildTodo={toggleChildTodo} />
-        <button onClick={handleClick} className="rounded-md border border-gray-500">
+        <button onClick={handleClick} className="rounded-md border border-gray-500" data-testid='add-child'>
           小タスク追加 +
         </button>
       </div>

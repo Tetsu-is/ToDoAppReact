@@ -310,7 +310,7 @@ function App() {
         <div className='px-10'>
           <div className='dog flex p-2 border-b-2'>
             <div className='mx-10'>{dogImage}</div>
-            <div className='bg-gray-300 rounded-full mt-10 text-lg py-1 px-10'>{tips}</div>
+            <div className='tips bg-gray-300 rounded-full mt-10 text-lg py-1 px-10'>{tips}</div>
           </div>
         </div>
 

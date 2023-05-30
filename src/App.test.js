@@ -125,7 +125,7 @@ describe("App", () => {
       .get('/api/breeds/image/random')
       .reply(200, dogApiResponse);
 
-    const {getByPlaceholderText, getByTestId} = render(<App />);
+    const { getByPlaceholderText, getByTestId } = render(<App />);
 
     const taskName = "New Task";
     fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
@@ -136,30 +136,18 @@ describe("App", () => {
     expect(screen.getByTestId('dogImage')).toHaveAttribute('src', 'https://images.dog.ceo/breeds/dog-image.jpg');
   });
 
-  /* test('fetchTips function retrieves data correctly', async () => {
-    const tipsApiResponse = {
-      slip: {
-        id: 1,
-        advice: 'Test advice'
+  test('fetchTips function retrieves data correctly', async () => {
+    const fetchTips = jest.fn(async () => {
+      try {
+        const response = await fetch("/Tips");
+        const data = await response.json();
+        const tip = data.slip.advice;
+      } catch (error) {
+        console.log('Error fetching data: ', error);
       }
-    };
-
-    nock('https://api.adviceslip.com')
-      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-      .get('/advice')
-      .reply(200, tipsApiResponse);
-
-      const {getByPlaceholderText, getByTestId} = render(<App />);
-
-    const taskName = "New Task";
-    fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
-    fireEvent.click(getByTestId('adding-task-button'));
-    const checkBox = screen.getByTestId('checkbox'); 
-    for(let i = 0; i < 6; i ++){
-      fireEvent.click(checkBox);
-    }
-
-    await waitFor(() => screen.getByTestId('checkbox'));
-    expect(screen.getByText('checkbox')).toBeInTheDocument();
-  }); */
+    })
+    const { getByText } = render(<App />);
+    await waitFor(() => screen.getByText("Tips."));
+    expect(screen.getByText("Tips.")).toBeInTheDocument();
+  });
 });

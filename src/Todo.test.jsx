@@ -58,4 +58,17 @@ describe("Todo", () => {
     expect(toggleTodo).toHaveBeenCalledWith(pastTodo.id);
     expect(pastTodo.completed).toBe(true);
   });
+
+  test("modal open", () => {
+    let modalOpen = true;
+    const toggleModal = jest.fn(() => {
+      modalOpen = !modalOpen;
+    });
+    const handleClick = jest.fn(()=>{
+      toggleModal(pastTodo.id);
+    });
+    const { getByTestId } = render(<Todo todo={pastTodo} toggleModal={toggleModal}/>);
+    fireEvent.click(getByTestId("add-child"));
+    expect(modalOpen).toBe(false);
+  });
 });

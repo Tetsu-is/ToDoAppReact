@@ -12,6 +12,7 @@ const ChildTask = ({ children, toggleChildTodo }) => {
             checked={child.completed}
             readOnly
             onChange={() => toggleChildTodo(child.id)}
+            data-testid='child-check-box'
           />
         </label>
         {child.name}
