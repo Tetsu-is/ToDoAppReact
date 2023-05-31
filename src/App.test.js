@@ -3,13 +3,7 @@ import App from './App';
 import '@testing-library/jest-dom';
 import nock from 'nock';
 
-
-
 describe("App", () => {
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
 
   const today = new Date();
   const day = String(today.getDate()).padStart(2, '0');
@@ -76,7 +70,7 @@ describe("App", () => {
   test("select genre", async () => {
     const { getByTestId, getAllByTestId } = render(<App />);
     fireEvent.change(getByTestId('select-genre'), { target: { value: "仕事" } })
-    let options = getAllByTestId('select-priority-option')
+    let options = getAllByTestId('select-genre-option')
     expect(options[0].selected).toBeTruthy();
     expect(options[1].selected).toBeFalsy();
   })
@@ -126,7 +120,6 @@ describe("App", () => {
       .reply(200, dogApiResponse);
 
     const { getByPlaceholderText, getByTestId } = render(<App />);
-
     const taskName = "New Task";
     fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
     fireEvent.click(getByTestId('adding-task-button'));
@@ -137,21 +130,7 @@ describe("App", () => {
   });
 
   test('fetchTips function retrieves data correctly', async () => {
-    const tipsApiResponse = {
-      slip: {
-        slip_id: "2",
-        advice: "Tips."
-    }
-    };
-
-    nock('https://api.adviceslip.com')
-      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-      .get('/advise')
-      .reply(200, tipsApiResponse);
-
-    
-
-    const { getByTestId, findByText, getByPlaceholderText } = render(<App />);
+    const { getByTestId, getByPlaceholderText } = render(<App/>);
     const taskName = "New Task";
     fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
     fireEvent.click(getByTestId('adding-task-button'));
@@ -159,7 +138,7 @@ describe("App", () => {
     for (let i = 0; i < 6; i++) {
       fireEvent.click(checkBox);
     }
-    const tipsElement = await waitFor(() => findByText("Tips."));
-    expect(tipsElement).toBeInTheDocument();
+    await waitFor(() => screen.getByText("DemoTip"));
+    expect(screen.getByText("DemoTip")).toBeInTheDocument();
   });
 });

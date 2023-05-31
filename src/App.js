@@ -93,7 +93,7 @@ function App() {
   const currentDate = `${year}-${month}-${day}`;
 
   const [todos, setTodos] = useState([]);
-  const [dogImage, setDogImage] = useState();
+  const [dogImageUrl, setDogImageUrl] = useState();
   const [count, setCount] = useState(0);
   const [tips, setTips] = useState();
   const [selectedDate, setSelectedDate] = useState(currentDate);
@@ -143,9 +143,7 @@ function App() {
       const imageUrl = data.message;
 
       if (todo.completed === true) {
-        setDogImage(
-          <img src={imageUrl} alt='dogImage' data-testid='dogImage' style={{ height: "80px", width: "auto" }} />
-        )
+        setDogImageUrl(imageUrl);
         setCount(prevCount => prevCount += 1)
         if (count % 3 === 2) {
           fetchTips();
@@ -162,7 +160,7 @@ function App() {
       const response = await fetch("https://api.adviceslip.com/advice");
       const data = await response.json();
       const tip = data.slip.advice;
-      setTips(<p data-testid='tips'>{tip}</p>);
+      setTips(tip);
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
@@ -236,7 +234,6 @@ function App() {
   }, [todos])
 
   //modal
-
   const handleClose = () => {
     setModalOpen(false);
   }
@@ -309,8 +306,12 @@ function App() {
         </div>
         <div className='px-10'>
           <div className='dog flex p-2 border-b-2'>
-            <div className='mx-10'>{dogImage}</div>
-            <div className='tips bg-gray-300 rounded-full mt-10 text-lg py-1 px-10'>{tips}</div>
+            <div className='mx-10'>
+              {dogImageUrl !== undefined && <img src={dogImageUrl} alt='dogImage' data-testid='dogImage' style={{ height: "80px", width: "auto" }} />}
+            </div>
+            <div className='tips bg-gray-300 rounded-full mt-10 text-lg py-1 px-10'>
+              {tips !== undefined && <p data-testid='tip-text-id'>{tips}</p>}
+            </div>
           </div>
         </div>
 
