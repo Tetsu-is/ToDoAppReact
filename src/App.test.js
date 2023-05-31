@@ -130,15 +130,34 @@ describe("App", () => {
   });
 
   test('fetchTips function retrieves data correctly', async () => {
-    const { getByTestId, getByPlaceholderText } = render(<App/>);
+    const tipApiResponse = {
+      slip: {
+        slip_id: "2",
+        advice: "Tips."
+      }
+    };
+    nock('https://api.adviceslip.com')
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/advice')
+      .reply(200, tipApiResponse);
+
+
+    const { getByTestId, findByText, getByPlaceholderText } = render(<App />);
     const taskName = "New Task";
     fireEvent.change(getByPlaceholderText(/タスクの名前/i), { target: { value: taskName } });
     fireEvent.click(getByTestId('adding-task-button'));
-    const checkBox = screen.getByTestId('checkbox');
-    for (let i = 0; i < 6; i++) {
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+
+    for (let i = 0; i < 5; i++) {
+      const checkBox = screen.getByTestId('checkbox');
       fireEvent.click(checkBox);
     }
-    await waitFor(() => screen.getByText("DemoTip"));
-    expect(screen.getByText("DemoTip")).toBeInTheDocument();
+
+    const tipElement = await screen.findByText(/Tips./i);
+    expect(tipElement).toBeInTheDocument();
   });
 });
